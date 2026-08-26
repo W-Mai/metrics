@@ -256,6 +256,22 @@ export default async function({faker}, target, that, [{username: login, page, pe
         created_at: faker.date.recent({days: 7}),
         public: true,
       },
+      ...(login === "activity-missing-push-commits" ? [{
+        id: "10000000015",
+        type: "PushEvent",
+        actor: {
+          login,
+        },
+        repo: {
+          name: `${faker.lorem.word()}/${faker.lorem.word()}`,
+        },
+        payload: {
+          size: 1,
+          ref: "refs/heads/master",
+        },
+        created_at: faker.date.recent({days: 7}),
+        public: true,
+      }] : []),
       {
         id: "10000000011",
         type: "PushEvent",

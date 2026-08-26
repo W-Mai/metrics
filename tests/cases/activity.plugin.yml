@@ -8,3 +8,17 @@
     plugin_activity_filter: issue, pr, release, fork, review, ref/create
     use_mocked_data: 'yes'
     verify: 'yes'
+- name: 📰 Recent activity - Push event without embedded commits
+  uses: lowlighter/metrics@latest
+  with:
+    token: MOCKED_TOKEN
+    user: activity-missing-push-commits
+    plugin_activity: 'yes'
+    plugin_activity_limit: 5
+    plugin_activity_days: 0
+    plugin_activity_filter: all
+    use_mocked_data: 'yes'
+    verify: 'no'
+  modes:
+    - action
+  timeout: 180000
