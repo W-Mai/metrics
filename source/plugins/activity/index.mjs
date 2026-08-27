@@ -111,9 +111,10 @@ export default async function({login, data, rest, q, account, imports}, {enabled
             }
             //Pull requests events
             case "PullRequestEvent": {
-              if (!["opened", "closed"].includes(payload.action))
+              const {action, pull_request} = payload
+              if (!(["opened", "closed"].includes(action)) || !pull_request?.user?.login)
                 return null
-              const {action, pull_request: {user: {login: user}, title, number, body: content, additions: added, deletions: deleted, changed_files: changed, merged}} = payload
+              const {user: {login: user}, title, number, body: content, additions: added, deletions: deleted, changed_files: changed, merged} = pull_request
               if (!imports.filters.text(user, ignored))
                 return null
               return {type: "pr", actor, timestamp, repo, action: (action === "closed") && (merged) ? "merged" : action, user, title, number, content: await imports.markdown(content, {mode: markdown, codelines}), lines: {added, deleted}, files: {changed}}
