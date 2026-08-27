@@ -79,7 +79,12 @@ METRICS_IMAGE_NEEDS_BUILD="$?"
 set -e
 if [[ "$METRICS_IMAGE_NEEDS_BUILD" -gt "0" ]]; then
   echo "Image $METRICS_IMAGE is not present locally, rebuilding it from Dockerfile"
-  docker build -t $METRICS_IMAGE .
+  docker buildx build \
+    --cache-from type=gha,scope=metrics \
+    --cache-to type=gha,mode=max,scope=metrics \
+    --load \
+    --tag $METRICS_IMAGE \
+    .
 else
   echo "Image $METRICS_IMAGE is present locally"
 fi
